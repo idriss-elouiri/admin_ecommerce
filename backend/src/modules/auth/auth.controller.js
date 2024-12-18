@@ -45,8 +45,9 @@ export const loginHandler = async (req, res, next) => {
     return res
       .status(200)
       .cookie("access_token", token, {
-        httpOnly: true,
-        secure: false,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production', 
+          sameSite: 'None'
       })
       .json(rest);
   } catch (error) {
