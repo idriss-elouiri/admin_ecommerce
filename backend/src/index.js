@@ -16,26 +16,30 @@ connectDb();
 app.use(express.json());
 app.options("*", cors());
 app.use(cookieParser());
-const allowedOrigins = [process.env.FRONTEND_URL, process.env.FRONTEND_URL2];
-
 app.use(
   cors({
     origin: (origin, callback) => {
+      const allowedOrigins = [process.env.FRONTEND_URL, process.env.FRONTEND_URL2];
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
+        callback(null, true); // Allow requests with no `Origin`
       } else {
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allows cookies
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+console.log("FRONTEND_URL2:", process.env.FRONTEND_URL2);
+
 app.use((req, res, next) => {
-  console.log("Origin:", req.headers.origin);
+  console.log("Origin:", req.headers.origin); // Log the origin header
+  console.log("Request URL:", req.url); // Log the requested endpoint
   next();
 });
+
 
 
 
